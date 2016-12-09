@@ -6,4 +6,8 @@ describe VoiceBase::Client do
       expect(VoiceBase::Client.camelize_name("i_love_transcripts")).to eq("iLoveTranscripts")
     end
   end
+
+  it "accepts token as parameter" do
+    expect(VoiceBase::Client.new({token: "foobar"}).token).to eq("foobar")
+  end
 end

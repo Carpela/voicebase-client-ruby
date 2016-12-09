@@ -3,6 +3,7 @@ require "uri"
 require "httparty"
 require "httmultiparty"
 require "active_support/core_ext/module"
+require "mime/types"
 
 require "voicebase/version"
 require "voicebase/helpers"
