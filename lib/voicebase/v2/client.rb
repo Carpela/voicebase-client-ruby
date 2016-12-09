@@ -64,8 +64,8 @@ module VoiceBase
         url = uri + "/media/#{args[:media_id]}"
 
         response = self.class.get(
-            url,
-            headers: default_headers(headers)
+          url,
+          headers: default_headers(headers)
         )
 
         VoiceBase::Response.new(response, api_version)
@@ -74,7 +74,7 @@ module VoiceBase
       def get_text_transcript(args, headers)
         raise ArgumentError, "Missing argument :media_id" unless args[:media_id]
         url = uri + "/media/#{args[:media_id]}/transcripts/latest"
-        
+
         headers.merge!({ 'Accept' => 'text/plain' })
 
         response = self.class.get(
