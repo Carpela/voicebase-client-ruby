@@ -8,6 +8,6 @@ describe Voicebase::Client do
   end
 
   it "accepts token as parameter" do
-    expect(Voicebase::Client.new({token: "foobar"}).token).to eq("foobar")
+    expect(Voicebase::Client.new({token: "foobar"}).token.to_s).to eq("foobar")
   end
 end

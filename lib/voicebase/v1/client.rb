@@ -55,7 +55,7 @@ module Voicebase
 
         # authenticate using token or key/password?
         if token && !token.expired?
-          params.merge!({token: token.token})
+          params.merge!({token: "#{@token}"})
         else
           params.merge!({apiKey: @auth_key, password: @auth_secret})
         end

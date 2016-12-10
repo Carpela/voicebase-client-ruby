@@ -20,7 +20,7 @@ module Voicebase
       @api_version = args[:api_version] || ENV.fetch('VOICEBASE_API_VERSION', '1.1')
       @auth_key    = args[:auth_key] || ENV['VOICEBASE_API_KEY']
       @auth_secret = args[:auth_secret] || ENV['VOICEBASE_API_SECRET']
-      @token       = args[:token]
+      @token       = Client::Token.new(args[:token]) if args[:token]
       @debug       = !!args[:debug]
       @user_agent  = args[:user_agent] || "usertesting-client/#{Voicebase::version}"
       @locale      = args[:locale] || 'en'  # US English
