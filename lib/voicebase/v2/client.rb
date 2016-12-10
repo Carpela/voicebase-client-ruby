@@ -1,4 +1,4 @@
-module VoiceBase
+module Voicebase
   module V2
     module Client
       BOUNDARY               = "0123456789ABLEWASIEREISAWELBA9876543210"
@@ -11,7 +11,7 @@ module VoiceBase
 
       def authenticate!
         auth = {:username => @auth_key, :password => @auth_secret}
-        response = VoiceBase::Response.new(
+        response = Voicebase::Response.new(
           self.class.get(
             uri + '/access/users/admin/tokens',
             basic_auth: auth,
@@ -20,9 +20,9 @@ module VoiceBase
               'Accept'       => 'application/json'
             }
           ), api_version)
-        @token = VoiceBase::Client::Token.new(response.tokens.any? && response.tokens.first.fetch("token"))
+        @token = Voicebase::Client::Token.new(response.tokens.any? && response.tokens.first.fetch("token"))
       rescue NoMethodError => ex
-        raise VoiceBase::AuthenticationError, response.status_message
+        raise Voicebase::AuthenticationError, response.status_message
       end
 
       def upload_media(args = {}, headers = {})
@@ -35,7 +35,7 @@ module VoiceBase
             headers: multipart_headers(headers),
             body: multipart_query(form_args)
         )
-        VoiceBase::Response.new(response, api_version)
+        Voicebase::Response.new(response, api_version)
       end
 
       # I presume this method exists for parity with the V1 API however we are not using it
@@ -54,7 +54,7 @@ module VoiceBase
           raise ArgumentError, "Missing argument :external_id"
         end
 
-        VoiceBase::Response.new(self.class.get(
+        Voicebase::Response.new(self.class.get(
           url, headers: default_headers(headers)
         ), api_version)
       end
@@ -68,7 +68,7 @@ module VoiceBase
           headers: default_headers(headers)
         )
 
-        VoiceBase::Response.new(response, api_version)
+        Voicebase::Response.new(response, api_version)
       end
 
       def get_text_transcript(args, headers)
@@ -96,7 +96,7 @@ module VoiceBase
       # I presume this method exists for parity with the V1 API however we are not using it
       def get_media_progress(args = {}, headers = {})
         raise ArgumentError, "Missing argument :media_id" unless args[:media_id]
-        VoiceBase::Response.new(self.class.get(
+        Voicebase::Response.new(self.class.get(
           uri + "/media/#{args[:media_id]}/progress",
           headers: default_headers(headers)
         ), api_version)
@@ -111,7 +111,7 @@ module VoiceBase
             headers: default_headers(headers)
         )
 
-        VoiceBase::Response.new(response, api_version)
+        Voicebase::Response.new(response, api_version)
       end
 
       private

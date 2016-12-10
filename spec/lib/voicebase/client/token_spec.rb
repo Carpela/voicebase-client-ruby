@@ -1,7 +1,7 @@
 require 'spec_helper'
 require 'timecop'
 
-describe VoiceBase::Client::Token do
+describe Voicebase::Client::Token do
   context "#expired?" do
     let(:timeout) { 10 }
     let(:initial_time) { Time.local(2016, 5, 2, 16, 22, 0) }
@@ -14,19 +14,19 @@ describe VoiceBase::Client::Token do
     end
 
     it "is false when the timeout period has not expired" do
-      token = VoiceBase::Client::Token.new(some_token, timeout)
+      token = Voicebase::Client::Token.new(some_token, timeout)
       Timecop.travel(non_expired_time)
       expect(token.expired?).to be_truthy
     end
 
     it "is true when the timeout period has expired" do
-      token = VoiceBase::Client::Token.new(some_token, timeout)
+      token = Voicebase::Client::Token.new(some_token, timeout)
       Timecop.travel(expired_time)
       expect(token.expired?).to be_truthy
     end
 
     it "delegates token method to_s" do
-      expect(VoiceBase::Client::Token.new("foobar").to_s).to eq("foobar")
+      expect(Voicebase::Client::Token.new("foobar").to_s).to eq("foobar")
     end
   end
 end

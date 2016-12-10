@@ -1,4 +1,4 @@
-module VoiceBase
+module Voicebase
   module V1
     module Client
       include Helpers
@@ -13,7 +13,7 @@ module VoiceBase
       end
 
       def authenticate!
-        response = VoiceBase::Response.new(
+        response = Voicebase::Response.new(
           self.class.post(uri,
           query: {
             version: @api_version, apiKey: @auth_key,
@@ -22,7 +22,7 @@ module VoiceBase
           }), api_version)
         @token = Token.new(response.token, TOKEN_TIMEOUT_IN_MS)
       rescue NoMethodError => ex
-        raise VoiceBase::AuthenticationError, response.status_message
+        raise Voicebase::AuthenticationError, response.status_message
       end
 
       # E.g. @client.upload_media media_url: "https://ut.aws.amazon.com/..."
@@ -40,7 +40,7 @@ module VoiceBase
         query = default_query(query_params)
 
         puts "post #{uri} #{query.inspect}, #{default_headers(headers).inspect}" if debug
-        VoiceBase::Response.new(self.class.post(uri,
+        Voicebase::Response.new(self.class.post(uri,
           query: query, headers: default_headers(headers)), api_version)
       end
 

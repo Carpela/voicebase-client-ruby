@@ -1,4 +1,4 @@
-module VoiceBase
+module Voicebase
   class JSON
     include Enumerable
 
@@ -46,7 +46,7 @@ module VoiceBase
     attr_writer :words
 
     def initialize(word_array = nil)
-      raise StandardError, "Must be initialized with words." if word_array.is_a?(Array) && !words.all? {|w| w.is_a?(VoiceBase::JSON::Word)}
+      raise StandardError, "Must be initialized with words." if word_array.is_a?(Array) && !words.all? {|w| w.is_a?(Voicebase::JSON::Word)}
       @words = word_array || []
     end
 
@@ -63,19 +63,19 @@ module VoiceBase
     end
 
     def gt(start_time)
-      VoiceBase::JSON.new(select {|w| w.start_time > start_time})
+      Voicebase::JSON.new(select {|w| w.start_time > start_time})
     end
 
     def gteq(start_time)
-      VoiceBase::JSON.new(select {|w| w.start_time >= start_time})
+      Voicebase::JSON.new(select {|w| w.start_time >= start_time})
     end
 
     def lt(start_time)
-      VoiceBase::JSON.new(select {|w| w.start_time < start_time})
+      Voicebase::JSON.new(select {|w| w.start_time < start_time})
     end
 
     def lteq(start_time)
-      VoiceBase::JSON.new(select {|w| w.start_time <= start_time})
+      Voicebase::JSON.new(select {|w| w.start_time <= start_time})
     end
 
     def to_a

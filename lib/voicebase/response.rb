@@ -1,4 +1,4 @@
-module VoiceBase
+module Voicebase
   class Response
     include Helpers
     attr_accessor :http_response
@@ -8,9 +8,9 @@ module VoiceBase
     def initialize(http_response, api_version = "1.1")
       @http_response = http_response
       if api_version.to_f < 2
-        self.extend(VoiceBase::V1::Response)
+        self.extend(Voicebase::V1::Response)
       else
-        self.extend(VoiceBase::V2::Response)
+        self.extend(Voicebase::V2::Response)
       end
     end
 
