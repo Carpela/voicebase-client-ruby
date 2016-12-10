@@ -1,4 +1,4 @@
-module VoiceBase
+module Voicebase
   class Client
     attr_accessor :args
     attr_accessor :api_host
@@ -22,15 +22,15 @@ module VoiceBase
       @auth_secret = args[:auth_secret] || ENV['VOICEBASE_API_SECRET']
       @token       = args[:token]
       @debug       = !!args[:debug]
-      @user_agent  = args[:user_agent] || "usertesting-client/#{VoiceBase::version}"
+      @user_agent  = args[:user_agent] || "usertesting-client/#{Voicebase::version}"
       @locale      = args[:locale] || 'en'  # US English
 
       if @api_version.to_f < 2.0
         self.class.include(HTTMultiParty)
-        self.extend(VoiceBase::V1::Client)
+        self.extend(Voicebase::V1::Client)
       else
         self.class.include(HTTParty)
-        self.extend(VoiceBase::V2::Client)
+        self.extend(Voicebase::V2::Client)
       end
     end
 
