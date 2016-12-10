@@ -28,5 +28,11 @@ describe Voicebase::Client::Token do
     it "delegates token method to_s" do
       expect(Voicebase::Client::Token.new("foobar").to_s).to eq("foobar")
     end
+
+    it "is not expired when infinity" do
+      token = Voicebase::Client::Token.new("foobar")
+      expect(token.timeout).to eq(Float::INFINITY)
+      expect(token).not_to be_expired
+    end
   end
 end

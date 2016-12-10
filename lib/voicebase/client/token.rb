@@ -10,7 +10,11 @@ module Voicebase
     end
 
     def expired?
-      Time.now > created_at + (timeout / 1000.to_f)
+      if timeout == Float::INFINITY
+        false
+      else
+        Time.now > created_at + (timeout / 1000.to_f)
+      end
     end
 
     def to_s
