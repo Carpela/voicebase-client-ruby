@@ -40,13 +40,12 @@ module Voicebase
 
       # I presume this method exists for parity with the V1 API however we are not using it
       def get_media(args = {}, headers = {})
-        raise ArgumentError, "Missing argument :media_id" unless args[:media_id]
         url = if args[:media_id]
           uri + "/media/#{args[:media_id]}"
         elsif args[:external_id]
           uri + "/media?externalID=#{args[:external_id]}"
         else
-          raise ArgumentError, "Missing argument :media_url or :media_file"
+          raise ArgumentError, "Missing argument :media_id or :external_id"
         end
         if args[:external_id]
           uri + "/media?externalID=#{args[:external_id]}"
