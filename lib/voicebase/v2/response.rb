@@ -8,7 +8,7 @@ module Voicebase
         # for the V1 API this indicates both a successful HTTP status code and a values of "SUCCESS" in the
         # returned JSON. with V2, there is no "SUCCESS" value. The combined use was split, adding
         # #transcript_ready? to both interfaces.
-        ok?
+        ok? && voicebase_response['status'].to_i < 400
       end
 
       def media_id
