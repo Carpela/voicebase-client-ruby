@@ -5,11 +5,18 @@ describe Voicebase::V2::Response do
 
   context "methods dependent on returned HTTP response" do
     context "#success?" do
-      let(:http_response_success) { double("http response", code: 200) }
+      let(:http_response_success) { double("http response", code: 200, parsed_response: {}) }
       let(:http_response_error) { double("http response", code: 404) }
+      let(:http_response_success_bad_status) { double("http response", code: 200, parsed_response: {"status"=>403}) }
+      let(:http_response_success_good_status) { double("http response", code: 200, parsed_response: {"status"=>"finished"}) }
 
       it "is true in the case of a successful response" do
         response = Voicebase::Response.new(http_response_success, v2_api)
+        expect(response.success?).to be_truthy
+      end
+
+      it "is true in the case of a successful response and good status" do
+        response = Voicebase::Response.new(http_response_success_good_status, v2_api)
         expect(response.success?).to be_truthy
       end
 
@@ -17,6 +24,12 @@ describe Voicebase::V2::Response do
         response = Voicebase::Response.new(http_response_error, v2_api)
         expect(response.success?).to be_falsey
       end
+
+      it "is false in the case of bad status code" do
+        response = Voicebase::Response.new(http_response_success_bad_status, v2_api)
+        expect(response.success?).to be_falsey
+      end
+
     end
   end
 
