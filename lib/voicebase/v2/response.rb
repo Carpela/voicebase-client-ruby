@@ -27,7 +27,11 @@ module Voicebase
           parsed_response
         else
           # json
-          parsed_response['media']['transcripts']['latest']['words']
+          if parsed_response['media']
+            parsed_response['media']['transcripts']['latest']['words']
+          else
+            parsed_response['transcripts']['latest']['words']
+          end
         end
       end
 
