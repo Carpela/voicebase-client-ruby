@@ -81,7 +81,7 @@ module Voicebase
           headers: default_headers(headers)
         )
 
-        response.parsed_response
+        response
       end
 
       def get_media_progress(args = {}, headers = {})
