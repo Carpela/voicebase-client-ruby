@@ -48,7 +48,7 @@ module Voicebase
           raise ArgumentError, "Missing argument :media_id or :external_id"
         end
         if args[:external_id]
-          uri + "/media?externalID=#{args[:external_id]}"
+          uri + "/media?externalId=#{args[:external_id]}"
         else
           raise ArgumentError, "Missing argument :external_id"
         end
