@@ -95,7 +95,7 @@ describe Voicebase::V2::Client do
 
     context "#get_json_transcript" do
       it "makes an API call to VoiceBase to retrieve the transcript results" do
-        url = "https://apis.voicebase.com/v2-beta/media/#{media_id}"
+        url = "https://apis.voicebase.com/v2-beta/media/#{media_id}/transcripts/latest"
         expect(Voicebase::Client).to receive(:get).with(url, httparty_options).and_return(http_response)
         client.get_json_transcript(voicebase_args, {})
       end
@@ -103,7 +103,7 @@ describe Voicebase::V2::Client do
 
     context "#get_json_transcript" do
       it "makes an API call to VoiceBase to retrieve the JSON transcript results" do
-        url = "https://apis.voicebase.com/v2-beta/media/#{media_id}"
+        url = "https://apis.voicebase.com/v2-beta/media/#{media_id}/transcripts/latest"
         expect(Voicebase::Client).to receive(:get).with(url, httparty_options).and_return(http_response)
         client.get_json_transcript(voicebase_args, {})
       end

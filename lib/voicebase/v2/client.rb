@@ -53,41 +53,37 @@ module Voicebase
         ), api_version)
       end
 
-      def get_json_transcript(args, headers)
+      def get_json_transcript(args = {}, headers = {})
+        get_transcript(args, headers)
+      end
+
+      def get_text_transcript(args = {}, headers = {})
+        get_transcript(args.merge(format: "txt"), headers)
+      end
+
+      def get_srt_transcript(args = {}, headers = {})
+        get_transcript(args.merge(format: "srt"), headers)
+      end
+
+      def get_transcript(args = {}, headers = {})
         raise ArgumentError, "Missing argument :media_id" unless args[:media_id]
-        url = uri + "/media/#{args[:media_id]}"
+        url = uri + "/media/#{args[:media_id]}/transcripts/latest"
+        transcript_format = args.delete(:format).to_s
+
+        if transcript_format == "txt" || transcript_format == "text"
+          headers = headers.merge({'Accept' => 'text/plain'})
+        elsif transcript_format == "srt"
+          headers = headers.merge({'Accept' => 'text/srt'})
+        end
 
         response = self.class.get(
           url,
           headers: default_headers(headers)
         )
 
-        Voicebase::Response.new(response, api_version)
-      end
-
-      def get_text_transcript(args, headers)
-        raise ArgumentError, "Missing argument :media_id" unless args[:media_id]
-        url = uri + "/media/#{args[:media_id]}/transcripts/latest"
-
-        headers.merge!({ 'Accept' => 'text/plain' })
-
-        response = self.class.get(
-            url,
-            headers: default_headers(headers)
-        )
-
         response.parsed_response
       end
 
-      def get_transcript(args = {}, headers = {})
-        if args[:format] == "txt"
-          get_text_transcript(args, headers)
-        else
-          get_json_transcript(args, headers)
-        end
-      end
-
-      # I presume this method exists for parity with the V1 API however we are not using it
       def get_media_progress(args = {}, headers = {})
         raise ArgumentError, "Missing argument :media_id" unless args[:media_id]
         Voicebase::Response.new(self.class.get(
