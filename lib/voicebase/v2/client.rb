@@ -43,14 +43,9 @@ module Voicebase
         url = if args[:media_id]
           uri + "/media/#{args[:media_id]}"
         elsif args[:external_id]
-          uri + "/media?externalID=#{args[:external_id]}"
-        else
-          raise ArgumentError, "Missing argument :media_id or :external_id"
-        end
-        if args[:external_id]
           uri + "/media?externalId=#{args[:external_id]}"
         else
-          raise ArgumentError, "Missing argument :external_id"
+          raise ArgumentError, "Missing argument :media_id or :external_id"
         end
 
         Voicebase::Response.new(self.class.get(
