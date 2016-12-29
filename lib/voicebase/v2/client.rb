@@ -76,12 +76,10 @@ module Voicebase
           headers = headers.merge({'Accept' => 'text/srt'})
         end
 
-        response = self.class.get(
+        Voicebase::Response.new(self.class.get(
           url,
           headers: default_headers(headers)
-        )
-
-        response
+        ), api_version)
       end
 
       def get_media_progress(args = {}, headers = {})
