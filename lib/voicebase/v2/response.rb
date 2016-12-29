@@ -4,43 +4,43 @@ module Voicebase
 
       TRANSCRIPT_READY_STATUS = "finished".freeze
 
+      delegate :parsed_response, to: :http_response, allow_nil: true
+
       def success?
         # for the V1 API this indicates both a successful HTTP status code and a values of "SUCCESS" in the
         # returned JSON. with V2, there is no "SUCCESS" value. The combined use was split, adding
         # #transcript_ready? to both interfaces.
-        ok? && voicebase_response['status'].to_i < 400
+        ok? && parsed_response['status'].to_i < 400
       end
 
       def media_id
-        voicebase_response['mediaId'] || voicebase_response['media']['mediaId']
+        parsed_response['mediaId'] || parsed_response['media']['mediaId']
       end
 
       def transcript_ready?
-        voicebase_response['media']['status'].casecmp(TRANSCRIPT_READY_STATUS) == 0
+        parsed_response['media']['status'].casecmp(TRANSCRIPT_READY_STATUS) == 0
       end
 
       def transcript
-        # this retrieves the JSON transcript only
-        # the plain text transcript is a plain text non-JSON response
-        voicebase_response['media']['transcripts']['latest']['words']
+        if headers["content-type"].to_s.match(/text\/srt/) ||
+          headers["content-type"].to_s.match(/text\/plain/)
+          parsed_response
+        else
+          # json
+          parsed_response['media']['transcripts']['latest']['words']
+        end
       end
 
       def keywords
-        voicebase_response['media']['keywords']['latest']['words']
+        parsed_response['media']['keywords']['latest']['words']
       end
 
       def keyword_groups
-        voicebase_response['media']['keywords']['latest']['groups']
+        parsed_response['media']['keywords']['latest']['groups']
       end
 
       def topics
-        voicebase_response['media']['topics']['latest']['topics']
-      end
-
-      private
-
-      def voicebase_response
-        http_response.parsed_response
+        parsed_response['media']['topics']['latest']['topics']
       end
 
     end

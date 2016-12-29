@@ -65,11 +65,34 @@ describe Voicebase::V2::Response do
     context "#transcript" do
       let(:transcipt) { 'transcript' }
       let(:parsed_response) { { 'media' => { 'transcripts' => { 'latest' => { 'words' => transcipt }}}}}
-      let(:http_response) { double("http response", code: 200, parsed_response: parsed_response) }
+      let(:headers) { {} }
+      let(:http_response) { double("http response", code: 200, parsed_response: parsed_response, headers: headers) }
 
-      it "gets the transcript" do
-        response = Voicebase::Response.new(http_response, v2_api)
-        expect(response.transcript).to eq(transcipt)
+      context "format json" do
+        it "gets the transcript" do
+          response = Voicebase::Response.new(http_response, v2_api)
+          expect(response.transcript).to eq(transcipt)
+        end
+      end
+
+      context "format text" do
+        let(:headers) { {"content-type" => "text/plain"} }
+        let(:parsed_response) { transcipt }
+
+        it "gets the transcript" do
+          response = Voicebase::Response.new(http_response, v2_api)
+          expect(response.transcript).to eq(transcipt)
+        end
+      end
+
+      context "format srt" do
+        let(:headers) { {"content-type" => "text/srt"} }
+        let(:parsed_response) { transcipt }
+
+        it "gets the transcript" do
+          response = Voicebase::Response.new(http_response, v2_api)
+          expect(response.transcript).to eq(transcipt)
+        end
       end
     end
 
