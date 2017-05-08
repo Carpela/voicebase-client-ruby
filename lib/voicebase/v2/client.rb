@@ -29,11 +29,11 @@ module Voicebase
         media_url = require_media_file_or_url(args)
         form_args = form_args(media_url, args[:language]) # language codes: en-US (default), en-UK, en-AU
         form_args.merge! metadata(args[:external_id]) if args[:external_id]
-
+puts "$$$ #{multipart_query(form_args)}"
         response = self.class.post(
-            uri + '/media',
-            headers: multipart_headers(headers),
-            body: multipart_query(form_args)
+          uri + '/media',
+          headers: multipart_headers(headers),
+          body: multipart_query(form_args)
         )
         Voicebase::Response.new(response, api_version)
       end
@@ -109,7 +109,13 @@ module Voicebase
           'media' => media_url,
           'configuration' => {
             'configuration' => {
-              'executor' => 'v2'
+              'executor' => 'v2',
+              'keywords': {
+                'semantic': false
+              },
+              'topics': {
+                'semantic': false
+              }
             }
           }
         }

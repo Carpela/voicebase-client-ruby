@@ -2,18 +2,18 @@ require 'spec_helper'
 
 describe Voicebase::V2::Client do
   let(:voicebase_options) { {
-      api_version: "2",
-      auth_key: "key",
-      auth_secret: "secret",
-      user_agent: "testing"
+    api_version: "2",
+    auth_key: "key",
+    auth_secret: "secret",
+    user_agent: "testing"
   } }
   let(:client) { Voicebase::Client.new(voicebase_options) }
 
   let(:token) { "asdf" }
   let(:tokens) { [ { "token" => token } ] }
   let(:parsed_response) { {
-      'status_message' => nil,
-      'tokens' => tokens
+    'status_message' => nil,
+    'tokens' => tokens
   } }
   let(:http_response) { double("http response", parsed_response: parsed_response) }
 
@@ -75,14 +75,14 @@ describe Voicebase::V2::Client do
       end
 
       it "makes an API call to VoiceBase to post the media file" do
-        body = "--0123456789ABLEWASIEREISAWELBA9876543210\r\nContent-Disposition: form-data; name=\"media\"\r\n\r\nhttp://s3.com/video.mp4\r\n--0123456789ABLEWASIEREISAWELBA9876543210\r\nContent-Disposition: form-data; name=\"configuration\"\r\n\r\n{\"configuration\":{\"executor\":\"v2\"}}\r\n--0123456789ABLEWASIEREISAWELBA9876543210--"
+        body = "--0123456789ABLEWASIEREISAWELBA9876543210\r\nContent-Disposition: form-data; name=\"media\"\r\n\r\nhttp://s3.com/video.mp4\r\n--0123456789ABLEWASIEREISAWELBA9876543210\r\nContent-Disposition: form-data; name=\"configuration\"\r\n\r\n{\"configuration\":{\"executor\":\"v2\",\"keywords\":{\"semantic\":false},\"topics\":{\"semantic\":false}}}\r\n--0123456789ABLEWASIEREISAWELBA9876543210--"
         httparty_options.merge!({body: body})
         expect(Voicebase::Client).to receive(:post).with(url, httparty_options).and_return(http_response)
         client.upload_media({}, {})
       end
 
       it "adds the engine language code if specified" do
-        body = "--0123456789ABLEWASIEREISAWELBA9876543210\r\nContent-Disposition: form-data; name=\"media\"\r\n\r\nhttp://s3.com/video.mp4\r\n--0123456789ABLEWASIEREISAWELBA9876543210\r\nContent-Disposition: form-data; name=\"configuration\"\r\n\r\n{\"configuration\":{\"executor\":\"v2\",\"language\":\"en-UK\"}}\r\n--0123456789ABLEWASIEREISAWELBA9876543210--"
+        body = "--0123456789ABLEWASIEREISAWELBA9876543210\r\nContent-Disposition: form-data; name=\"media\"\r\n\r\nhttp://s3.com/video.mp4\r\n--0123456789ABLEWASIEREISAWELBA9876543210\r\nContent-Disposition: form-data; name=\"configuration\"\r\n\r\n{\"configuration\":{\"executor\":\"v2\",\"keywords\":{\"semantic\":false},\"topics\":{\"semantic\":false},\"language\":\"en-UK\"}}\r\n--0123456789ABLEWASIEREISAWELBA9876543210--"
         httparty_options.merge!({body: body})
         expect(Voicebase::Client).to receive(:post).with(url, httparty_options).and_return(http_response)
         client.upload_media({language: 'en-UK'}, {})
