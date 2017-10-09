@@ -65,6 +65,10 @@ module Voicebase
         get_transcript(args.merge(format: "srt"), headers)
       end
 
+      def get_webvtt_transcript(args = {}, headers = {})
+        get_transcript(args.merge(format: "webvtt"), headers)
+      end
+
       def get_transcript(args = {}, headers = {})
         raise ArgumentError, "Missing argument :media_id" unless args[:media_id]
         url = uri + "/media/#{args[:media_id]}/transcripts/latest"
@@ -74,6 +78,8 @@ module Voicebase
           headers = headers.merge({'Accept' => 'text/plain'})
         elsif transcript_format == "srt"
           headers = headers.merge({'Accept' => 'text/srt'})
+        elsif transcript_format == "webvtt"
+          headers = headers.merge({'Accept' => 'text/webvtt'})
         end
 
         Voicebase::Response.new(self.class.get(
