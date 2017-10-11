@@ -65,8 +65,8 @@ module Voicebase
         get_transcript(args.merge(format: "srt"), headers)
       end
 
-      def get_webvtt_transcript(args = {}, headers = {})
-        get_transcript(args.merge(format: "webvtt"), headers)
+      def get_vtt_transcript(args = {}, headers = {})
+        get_transcript(args.merge(format: "vtt"), headers)
       end
 
       def get_transcript(args = {}, headers = {})
@@ -78,8 +78,8 @@ module Voicebase
           headers = headers.merge({'Accept' => 'text/plain'})
         elsif transcript_format == "srt"
           headers = headers.merge({'Accept' => 'text/srt'})
-        elsif transcript_format == "webvtt"
-          headers = headers.merge({'Accept' => 'text/webvtt'})
+        elsif transcript_format == "vtt"
+          headers = headers.merge({'Accept' => 'text/vtt'})
         end
 
         Voicebase::Response.new(self.class.get(
