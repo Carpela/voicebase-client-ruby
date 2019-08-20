@@ -89,7 +89,7 @@ module VoiceBase
           headers = headers.merge({'Accept' => 'text/vtt'})
         end
 
-        Voicebase::Response.new(self.class.get(
+        VoiceBase::Response.new(self.class.get(
           url,
           headers: default_headers(headers)
         ), api_version)
@@ -121,10 +121,13 @@ module VoiceBase
       def form_args(media_url, language = nil)
         args = {
           'mediaUrl' => media_url,
-          'configuration' => {
+            'configuration' => { 
+              'speechModel' => {
+                'language' => "en-UK"
+              }
             }
           }
-        }
+        
         args['configuration']['speechModel'].merge!({'language' => language}) if language
         args
       end

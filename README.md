@@ -1,4 +1,4 @@
-# Voicebase Client Ruby
+# VoiceBase Client Ruby
 
 [![Build Status](https://travis-ci.org/usertesting/voicebase-client-ruby.svg?branch=master)](https://travis-ci.org/usertesting/voicebase-client-ruby)
 

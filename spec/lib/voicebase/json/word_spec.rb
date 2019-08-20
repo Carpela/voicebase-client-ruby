@@ -1,7 +1,7 @@
 require 'spec_helper'
 
-describe Voicebase::JSON::Word do
-  let(:word) { Voicebase::JSON::Word.new({"p" => 1, "s" => 1610, "e" => 1780, "c" => 0.7, "w" => "This", "m" => "article"}) }
+describe VoiceBase::JSON::Word do
+  let(:word) { VoiceBase::JSON::Word.new({"p" => 1, "s" => 1610, "e" => 1780, "c" => 0.7, "w" => "This", "m" => "article"}) }
 
   it "should initialize attributes" do
     expect(word.sequence).to eq(1)
@@ -43,8 +43,8 @@ describe Voicebase::JSON::Word do
 
   it "#empty?" do
     expect(word.empty?).to eq(false)
-    expect(Voicebase::JSON::Word.new.empty?).to eq(true)
-    expect(Voicebase::JSON::Word.new({"w" => "ok"}).empty?).to eq(false)
+    expect(VoiceBase::JSON::Word.new.empty?).to eq(true)
+    expect(VoiceBase::JSON::Word.new({"w" => "ok"}).empty?).to eq(false)
   end
 
   it "#to_json" do

@@ -4,6 +4,9 @@ module VoiceBase
 
       TRANSCRIPT_READY_STATUS = "finished".freeze
 
+      delegate :parsed_response, to: :http_response, allow_nil: true
+
+
       def success?
 
         # for the V1 API this indicates both a successful HTTP status code and a values of "SUCCESS" in the
@@ -16,7 +19,7 @@ module VoiceBase
       def media_id
         parsed_response['mediaId'] || parsed_response['media']['mediaId']
       end
-      end
+      
 
       def transcript_ready?
         parsed_response['media']['status'].casecmp(TRANSCRIPT_READY_STATUS) == 0

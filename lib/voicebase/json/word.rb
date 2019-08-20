@@ -1,4 +1,4 @@
-module Voicebase
+module VoiceBase
   class JSON::Word
     attr_accessor :sequence
     attr_accessor :start_time
@@ -28,7 +28,7 @@ module Voicebase
     end
 
     def clone
-      clone = Voicebase::JSON::Word.new
+      clone = VoiceBase::JSON::Word.new
       clone.sequence   = sequence
       clone.start_time = start_time
       clone.end_time   = end_time

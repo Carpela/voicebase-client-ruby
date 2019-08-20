@@ -1,4 +1,4 @@
-module Voicebase
+module VoiceBase
   module V1; end
 end
 

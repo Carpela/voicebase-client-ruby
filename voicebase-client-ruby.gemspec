@@ -5,12 +5,12 @@ require 'voicebase/version'
 
 Gem::Specification.new do |spec|
   spec.name          = "voicebase-client-ruby"
-  spec.version       = Voicebase::version
-  spec.authors       = ["Juergen Fesslmeier", "April Wensel", "Jerry Hogsett"]
-  spec.email         = ["jerry@usertesting.com", "client-dev@usertesting.com"]
+  spec.version       = VoiceBase::version
+  spec.authors       = ["Keiran Betteley", "Juergen Fesslmeier", "April Wensel", "Jerry Hogsett"]
+  spec.email         = ["keiran@speaktomyagent.com", "jerry@usertesting.com", "client-dev@usertesting.com"]
 
-  spec.summary       = %q{Ruby client for Voicebase API Version 1.x and 2.x.}
-  spec.description   = %q{Ruby client for Voicebase API Version 1.x and 2.x that will make both API versions available at the same time.}
+  spec.summary       = %q{Ruby client for VoiceBase API Version 1.x and 2.x.}
+  spec.description   = %q{Ruby client for VoiceBase API Version 1.x and 2.x that will make both API versions available at the same time.}
   spec.homepage      = "https://github.com/usertesting/voicebase-client-ruby"
   spec.license       = "MIT"
 
@@ -19,7 +19,7 @@ Gem::Specification.new do |spec|
   spec.executables   = spec.files.grep(%r{^exe/}) { |f| File.basename(f) }
   spec.require_paths = ["lib"]
 
-  spec.add_development_dependency "bundler", "~> 1.11"
+  spec.add_development_dependency "bundler"
   spec.add_development_dependency "rake", "~> 10.0"
   spec.add_development_dependency "rspec", "~> 3.0"
   spec.add_development_dependency "timecop", "~> 0.8"

@@ -1,8 +1,8 @@
-describe Voicebase::V1::Client do
-  let(:client) { Voicebase::Client.new }
+describe VoiceBase::V1::Client do
+  let(:client) { VoiceBase::Client.new }
 
   it "supports client actions" do
-    expect(Voicebase::V1::Client::ACTIONS).to eq(["uploadMedia", "getTranscript", "deleteFile", "getFileStatus"])
+    expect(VoiceBase::V1::Client::ACTIONS).to eq(["uploadMedia", "getTranscript", "deleteFile", "getFileStatus"])
   end
 
   it "has a valid uri" do
@@ -14,13 +14,13 @@ describe Voicebase::V1::Client do
     expect(client.api_host).to eq("https://api.voicebase.com")
     expect(client.api_endpoint).to eq("/services")
     expect(client.debug).to eq(false)
-    expect(client.user_agent).to eq("usertesting-client/#{Voicebase::version}")
+    expect(client.user_agent).to eq("usertesting-client/#{VoiceBase::version}")
     expect(client.cookies).to eq(nil)
     expect(client.locale).to eq("en")
   end
 
   it "should init with debug" do
-    client = Voicebase::Client.new(debug: true)
+    client = VoiceBase::Client.new(debug: true)
     expect(client.debug).to be(true)
   end
 
@@ -29,7 +29,7 @@ describe Voicebase::V1::Client do
     client.upload_media(media_url: "http://download.url.example/v0.mp4")
   end
 
-  describe Voicebase::Client::Token do
+  describe VoiceBase::Client::Token do
     let(:timeout) { 10 }
     let(:initial_time) { Time.local(2016, 5, 2, 16, 22, 0) }
     let(:expired_time) { Time.local(2016, 5, 2, 16, 22, timeout + 1) }
@@ -39,19 +39,19 @@ describe Voicebase::V1::Client do
     end
 
     it "should create token instance" do
-      token = Voicebase::Client::Token.new("abcd-token", 1440)
+      token = VoiceBase::Client::Token.new("abcd-token", 1440)
       expect(token.token).to eq("abcd-token")
       expect(token.timeout).to eq(1440)
       expect(token.created_at).not_to eq(nil)
     end
 
     it "should not be expired?" do
-      token = Voicebase::Client::Token.new("unexpired-token", 2000)
+      token = VoiceBase::Client::Token.new("unexpired-token", 2000)
       expect(token.expired?).to eq(false)
     end
 
     it "should be expired?" do
-      token = Voicebase::Client::Token.new("expired-token", timeout)
+      token = VoiceBase::Client::Token.new("expired-token", timeout)
       Timecop.travel(expired_time)
       expect(token.expired?).to eq(true)
     end

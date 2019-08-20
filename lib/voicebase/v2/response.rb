@@ -1,4 +1,4 @@
-module Voicebase
+module VoiceBase
   module V2
     module Response
 

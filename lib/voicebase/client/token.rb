@@ -1,9 +1,9 @@
-module Voicebase
+module VoiceBase
   class Client::Token
     attr_accessor :token, :created_at, :timeout
 
     def initialize(token, timeout = Float::INFINITY)
-      raise Voicebase::AuthenticationError, "Authentication token cannot be empty" unless token
+      raise VoiceBase::AuthenticationError, "Authentication token cannot be empty" unless token
       @token      = token
       @created_at = Time.now
       @timeout    = timeout

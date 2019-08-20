@@ -1,4 +1,4 @@
-module Voicebase
+module VoiceBase
   module V1
     module Response
       def self.extended(response)

@@ -1,4 +1,4 @@
-module Voicebase
+module VoiceBase
   module Helpers
     def self.included(base)
       base.send :extend, ClassMethods

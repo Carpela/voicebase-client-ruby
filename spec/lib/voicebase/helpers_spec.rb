@@ -1,19 +1,19 @@
 require 'spec_helper'
 
-class Voicebase::TestClass
-  include Voicebase::Helpers
+class VoiceBase::TestClass
+  include VoiceBase::Helpers
 end
 
-describe Voicebase::Helpers do
+describe VoiceBase::Helpers do
 
   context "class" do
     it "should camelize name" do
-      expect(Voicebase::TestClass.camelize_name("request_status")).to eq("requestStatus")
+      expect(VoiceBase::TestClass.camelize_name("request_status")).to eq("requestStatus")
     end
   end
 
   it "should camelize name" do
-    expect(Voicebase::TestClass.new.camelize_name("request_status")).to eq("requestStatus")
+    expect(VoiceBase::TestClass.new.camelize_name("request_status")).to eq("requestStatus")
   end
 
 end

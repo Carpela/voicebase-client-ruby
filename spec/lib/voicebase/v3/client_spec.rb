@@ -1,8 +1,8 @@
 require 'spec_helper'
 
-describe VoiceBase::V2::Client do
+describe VoiceBase::V3::Client do
   let(:voicebase_options) { {
-    api_version: "2",
+    api_version: "3",
     auth_key: "key",
     auth_secret: "secret",
     user_agent: "testing"
@@ -26,7 +26,7 @@ describe VoiceBase::V2::Client do
   context "pre-authentication" do
     context "#authenticate!" do
       it "makes an API call to VoiceBase with the key & secret and processes a returned token" do
-        url = "https://apis.voicebase.com/v2-beta/access/users/admin/tokens"
+        url = "https://apis.voicebase.com/v3/access/users/admin/tokens"
         httparty_options = {
             basic_auth:
                 {
@@ -66,7 +66,7 @@ describe VoiceBase::V2::Client do
     end
 
     context "#upload_media" do
-      let(:url) { "https://apis.voicebase.com/v2-beta/media" }
+      let(:url) { "https://apis.voicebase.com/v3/media" }
       let(:media_url) { "http://s3.com/video.mp4" }
 
       before do
@@ -75,14 +75,14 @@ describe VoiceBase::V2::Client do
       end
 
       it "makes an API call to VoiceBase to post the media file" do
-        body = "--0123456789ABLEWASIEREISAWELBA9876543210\r\nContent-Disposition: form-data; name=\"media\"\r\n\r\nhttp://s3.com/video.mp4\r\n--0123456789ABLEWASIEREISAWELBA9876543210\r\nContent-Disposition: form-data; name=\"configuration\"\r\n\r\n{\"configuration\":{\"executor\":\"v2\",\"keywords\":{\"semantic\":false},\"topics\":{\"semantic\":false}}}\r\n--0123456789ABLEWASIEREISAWELBA9876543210--"
+        body = "--0123456789ABLEWASIEREISAWELBA9876543210\r\nContent-Disposition: form-data; name=\"mediaUrl\"\r\n\r\nhttp://s3.com/video.mp4\r\n--0123456789ABLEWASIEREISAWELBA9876543210\r\nContent-Disposition: form-data; name=\"configuration\"\r\n\r\n{\"speechModel\":{\"language\":\"en-UK\"}}\r\n--0123456789ABLEWASIEREISAWELBA9876543210--"
         httparty_options.merge!({body: body})
         expect(VoiceBase::Client).to receive(:post).with(url, httparty_options).and_return(http_response)
         client.upload_media({}, {})
       end
 
       it "adds the engine language code if specified" do
-        body = "--0123456789ABLEWASIEREISAWELBA9876543210\r\nContent-Disposition: form-data; name=\"media\"\r\n\r\nhttp://s3.com/video.mp4\r\n--0123456789ABLEWASIEREISAWELBA9876543210\r\nContent-Disposition: form-data; name=\"configuration\"\r\n\r\n{\"configuration\":{\"executor\":\"v2\",\"keywords\":{\"semantic\":false},\"topics\":{\"semantic\":false},\"language\":\"en-UK\"}}\r\n--0123456789ABLEWASIEREISAWELBA9876543210--"
+        body = "--0123456789ABLEWASIEREISAWELBA9876543210\r\nContent-Disposition: form-data; name=\"mediaUrl\"\r\n\r\nhttp://s3.com/video.mp4\r\n--0123456789ABLEWASIEREISAWELBA9876543210\r\nContent-Disposition: form-data; name=\"configuration\"\r\n\r\n{\"speechModel\":{\"language\":\"en-UK\"}}\r\n--0123456789ABLEWASIEREISAWELBA9876543210--"
         httparty_options.merge!({body: body})
         expect(VoiceBase::Client).to receive(:post).with(url, httparty_options).and_return(http_response)
         client.upload_media({language: 'en-UK'}, {})
@@ -95,7 +95,7 @@ describe VoiceBase::V2::Client do
 
     context "#get_json_transcript" do
       it "makes an API call to VoiceBase to retrieve the transcript results" do
-        url = "https://apis.voicebase.com/v2-beta/media/#{media_id}/transcripts/latest"
+        url = "https://apis.voicebase.com/v3/media/#{media_id}/transcripts/latest"
         expect(VoiceBase::Client).to receive(:get).with(url, httparty_options).and_return(http_response)
         client.get_json_transcript(voicebase_args, {})
       end
@@ -103,7 +103,7 @@ describe VoiceBase::V2::Client do
 
     context "#get_json_transcript" do
       it "makes an API call to VoiceBase to retrieve the JSON transcript results" do
-        url = "https://apis.voicebase.com/v2-beta/media/#{media_id}/transcripts/latest"
+        url = "https://apis.voicebase.com/v3/media/#{media_id}/transcripts/latest"
         expect(VoiceBase::Client).to receive(:get).with(url, httparty_options).and_return(http_response)
         client.get_json_transcript(voicebase_args, {})
       end
@@ -111,7 +111,7 @@ describe VoiceBase::V2::Client do
 
     context "#get_text_transcript" do
       it "makes an API call to VoiceBase to retrieve the plain text transcript results" do
-        url = "https://apis.voicebase.com/v2-beta/media/#{media_id}/transcripts/latest"
+        url = "https://apis.voicebase.com/v3/media/#{media_id}/transcripts/latest"
         @request_headers.merge!({"Accept" => "text/plain"})
         expect(VoiceBase::Client).to receive(:get).with(url, httparty_options).and_return(http_response)
         client.get_text_transcript(voicebase_args, {})
@@ -124,7 +124,7 @@ describe VoiceBase::V2::Client do
 
     context "#delete_file" do
       it "makes an API call to VoiceBase to delete the media" do
-        url = "https://apis.voicebase.com/v2-beta/media/#{media_id}"
+        url = "https://apis.voicebase.com/v3/media/#{media_id}"
         expect(VoiceBase::Client).to receive(:delete).with(url, httparty_options).and_return(http_response)
         client.delete_file(voicebase_args, {})
       end
