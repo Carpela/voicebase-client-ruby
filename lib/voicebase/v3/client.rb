@@ -1,17 +1,17 @@
-module Voicebase
-  module V2
+module VoiceBase 
+  module V3
     module Client
       BOUNDARY               = "0123456789ABLEWASIEREISAWELBA9876543210"
       MULTIPART_CONTENT_TYPE = "multipart/form-data; boundary=#{BOUNDARY}"
 
       def self.extended(client, args = {})
-        client.api_host     = client.args[:host] || ENV.fetch('VOICEBASE_V2_API_HOST', 'https://apis.voicebase.com')
-        client.api_endpoint = client.args[:api_endpoint] || ENV.fetch('VOICEBASE_V2_API_ENDPOINT', '/v2-beta')
+        client.api_host     = client.args[:host] || ENV.fetch('VOICEBASE_V3_API_HOST', 'https://apis.voicebase.com')
+        client.api_endpoint = client.args[:api_endpoint] || ENV.fetch('VOICEBASE_V3_API_ENDPOINT', '/v3')
       end
 
       def authenticate!
         auth = {:username => @auth_key, :password => @auth_secret}
-        response = Voicebase::Response.new(
+        response = VoiceBase::Response.new(
           self.class.get(
             uri + '/access/users/admin/tokens',
             basic_auth: auth,
@@ -20,44 +20,47 @@ module Voicebase
               'Accept'       => 'application/json'
             }
           ), api_version)
-        @token = Voicebase::Client::Token.new(response.tokens.any? && response.tokens.first.fetch("token"))
+        @token = VoiceBase::Client::Token.new(response.tokens.any? && response.tokens.first.fetch("token"))
       rescue NoMethodError => ex
-        raise Voicebase::AuthenticationError, response.status_message
+        raise VoiceBase::AuthenticationError, response.status_message
       end
 
       def upload_media(args = {}, headers = {})
         media_url = require_media_file_or_url(args)
         form_args = form_args(media_url, args[:language]) # language codes: en-US (default), en-UK, en-AU
         form_args.merge! metadata(args[:external_id]) if args[:external_id]
-        form_args['configuration']['configuration'].merge! args[:configuration] if args[:configuration]
+        form_args['configuration'].merge! args[:configuration] if args[:configuration]
+
         response = self.class.post(
-          uri + '/media',
-          headers: multipart_headers(headers),
-          body: multipart_query(form_args)
+            uri + '/media',
+            headers: multipart_headers(headers),
+            body: multipart_query(form_args)
         )
-        Voicebase::Response.new(response, api_version)
+        VoiceBase::Response.new(response, api_version)
       end
 
       # I presume this method exists for parity with the V1 API however we are not using it
       def get_media(args = {}, headers = {})
+        raise ArgumentError, "Missing argument :media_id" unless args[:media_id]
         url = if args[:media_id]
           uri + "/media/#{args[:media_id]}"
         elsif args[:external_id]
-          uri + "/media?externalId=#{args[:external_id]}"
+          uri + "/media?externalID=#{args[:external_id]}"
         else
-          raise ArgumentError, "Missing argument :media_id or :external_id"
+          raise ArgumentError, "Missing argument :media_url or :media_file"
         end
         if args[:external_id]
           uri + "/media?externalID=#{args[:external_id]}"
         else
           raise ArgumentError, "Missing argument :external_id"
         end
-        Voicebase::Response.new(self.class.get(
+
+        VoiceBase::Response.new(self.class.get(
           url, headers: default_headers(headers)
         ), api_version)
       end
 
-      def get_json_transcript(args = {}, headers = {})
+       def get_json_transcript(args = {}, headers = {})
         get_transcript(args, headers)
       end
 
@@ -92,9 +95,10 @@ module Voicebase
         ), api_version)
       end
 
+      # I presume this method exists for parity with the V1 API however we are not using it
       def get_media_progress(args = {}, headers = {})
         raise ArgumentError, "Missing argument :media_id" unless args[:media_id]
-        Voicebase::Response.new(self.class.get(
+        VoiceBase::Response.new(self.class.get(
           uri + "/media/#{args[:media_id]}/progress",
           headers: default_headers(headers)
         ), api_version)
@@ -109,27 +113,19 @@ module Voicebase
             headers: default_headers(headers)
         )
 
-        Voicebase::Response.new(response, api_version)
+        VoiceBase::Response.new(response, api_version)
       end
 
       private
 
       def form_args(media_url, language = nil)
         args = {
-          'media' => media_url,
+          'mediaUrl' => media_url,
           'configuration' => {
-            'configuration' => {
-              'executor' => 'v2',
-              'keywords': {
-                'semantic': false
-              },
-              'topics': {
-                'semantic': false
-              }
             }
           }
         }
-        args['configuration']['configuration'].merge!({'language' => language}) if language
+        args['configuration']['speechModel'].merge!({'language' => language}) if language
         args
       end
 
@@ -152,9 +148,8 @@ module Voicebase
       def default_headers(headers = {})
         authenticate! unless token
         headers = {
-          'User-Agent' => user_agent,
-        }.tap {|o|
-          o['Authorization'] = "Bearer #{token}" if token
+            'Authorization' => "Bearer #{token.token}",
+            'User-Agent' => user_agent
         }.reject { |k, v| blank?(v) }.merge(headers)
         puts "> headers\n> #{headers}" if debug
         headers

@@ -9,8 +9,10 @@ module Voicebase
       @http_response = http_response
       if api_version.to_f < 2
         self.extend(Voicebase::V1::Response)
+      elsif api_version.to_f < 3
+        self.extend(VoiceBase::V2::Response)
       else
-        self.extend(Voicebase::V2::Response)
+        self.extend(VoiceBase::V3::Response)
       end
     end
 
