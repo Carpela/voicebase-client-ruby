@@ -49,11 +49,11 @@ module VoiceBase
         else
           raise ArgumentError, "Missing argument :media_url or :media_file"
         end
-        if args[:external_id]
-          uri + "/media?externalID=#{args[:external_id]}"
-        else
-          raise ArgumentError, "Missing argument :external_id"
-        end
+        # if args[:external_id]
+        #   uri + "/media?externalID=#{args[:external_id]}"
+        # else
+        #   raise ArgumentError, "Missing argument :external_id"
+        # end
 
         VoiceBase::Response.new(self.class.get(
           url, headers: default_headers(headers)
@@ -135,11 +135,9 @@ module VoiceBase
       def metadata(external_id)
         {
           'metadata' => {  
-            'external' => {
-              'externalId' => "#{external_id}"
-            }
+            'externalId' => "#{external_id}"      
           }
-        }
+        } 
       end
 
       def blank?(value)
